@@ -1,93 +1,58 @@
-# 🦞 OpenClaw Web Interface
+# Open Claw Web Interface
 
-> A beautiful, self-hosted chat UI for your [OpenClaw](https://openclaw.ai) AI agent — run it locally or on a VPS, no third-party apps required.
+A clean, modern web interface for [OpenClaw](https://openclaw.ai) — an end-to-end encrypted AI agent that connects to your apps (WhatsApp, Notion, Apple Notes, and more).
 
-![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript) ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss) ![License](https://img.shields.io/badge/license-MIT-green)
+This project gives you a beautiful chat UI that connects directly to your local OpenClaw gateway over WebSocket, so you can talk to your AI agent from any browser.
 
----
-
-## 🤔 What is this?
-
-OpenClaw is an AI agent that connects to your apps — WhatsApp, Notion, Apple Notes, and more. It normally lives inside WhatsApp or Telegram, but those apps are limited:
-
-- No markdown rendering
-- No code syntax highlighting
-- Messages go through Meta or Telegram servers
-- No visibility into what skills/tools your agent has
-
-**This project gives OpenClaw a proper home.** A clean, fast, self-hosted web interface that connects directly to your OpenClaw gateway over WebSocket — fully local, fully private, fully yours.
+![Open Claw Web Interface](https://img.shields.io/badge/Next.js-16-black?logo=next.js) ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript) ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss)
 
 ---
 
 ## ✨ Features
 
-- 💬 **Real-time streaming** — See responses token by token as the AI thinks
-- 📝 **Full Markdown** — Tables, code blocks, syntax highlighting, bold, lists — all rendered beautifully
-- 🧠 **Skills sidebar** — See every tool and skill your agent has connected at a glance
-- 🔒 **100% Private** — Everything runs locally, no data ever leaves your machine
-- 🌙 **Dark / Light mode** — Built-in theme toggle
-- 🔑 **Zero API keys** — No OpenAI key, no Gemini key, nothing. Just connect to your local gateway
-- 🖥️ **VPS ready** — Run it on a server and access it from anywhere via SSH tunnel
-- ⚡ **Fast** — Built with Next.js 15 and Tailwind CSS 4
+- **Real-time streaming** — Live token-by-token responses via WebSocket
+- **Markdown rendering** — Full markdown + syntax highlighting in chat
+- **Skills sidebar** — See all your connected OpenClaw skills at a glance
+- **WhatsApp & Notion integration** — Works with whatever channels you have connected in OpenClaw
+- **Dark mode** — Built-in dark/light theme toggle
+- **No API keys needed** — Connects to your local OpenClaw gateway, no external services required in this app
 
 ---
 
-## 🆚 Why use this instead of WhatsApp or Telegram?
+## 🛠 Prerequisites
 
-| Feature | This Web UI | WhatsApp / Telegram |
-|---------|-------------|---------------------|
-| Markdown + code rendering | ✅ Full support | ❌ Plain text only |
-| Privacy (local only) | ✅ Never leaves your machine | ⚠️ Goes through Meta/Telegram |
-| Skills visibility | ✅ Sidebar shows all tools | ❌ Hidden |
-| No phone required | ✅ Just a browser | ❌ Phone must stay online |
-| Self hosted | ✅ You own everything | ❌ Closed platforms |
-| Rate limits | ✅ None | ⚠️ Limits apply |
-| VPS friendly | ✅ SSH tunnel support | ❌ Complicated |
+You need **OpenClaw** installed and running on your machine.
 
----
-
-## 🛠️ Prerequisites
-
-- [Node.js](https://nodejs.org) 18+
-- [OpenClaw](https://openclaw.ai) installed and running
-
-Install OpenClaw:
+Install OpenClaw (if not already installed):
 ```bash
 npm install -g openclaw
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Running the Project
 
-### 1. Start OpenClaw gateway
+### Step 1 — Start the OpenClaw gateway
 
 ```bash
 openclaw gateway install
 openclaw gateway start
 ```
 
-Check it is running:
+Verify it's running:
 ```bash
 openclaw status
 ```
 
-You should see `Gateway: reachable` and your channels (e.g. `WhatsApp: OK`).
+You should see `Gateway: reachable` and your connected channels (e.g. WhatsApp: OK).
 
-### 2. Clone this repo
-
-```bash
-git clone https://github.com/YOUR_USERNAME/openclaw-web.git
-cd openclaw-web
-```
-
-### 3. Install dependencies
+### Step 2 — Install dependencies
 
 ```bash
 npm install
 ```
 
-### 4. Start the app
+### Step 3 — Start the web interface
 
 ```bash
 npm run dev
@@ -95,68 +60,125 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 5. Connect to your gateway
+### Step 4 — Connect
 
-On first launch enter:
+On first launch you'll see an onboarding screen asking for:
 
 | Field | Value |
 |-------|-------|
 | **Gateway URL** | `ws://127.0.0.1:18789` |
-| **Token** | Found in `~/.openclaw/openclaw.json` |
+| **Token** | Your OpenClaw auth token (find it in `~/.openclaw/openclaw.json`) |
+
+Once connected, you can start chatting with your AI agent.
 
 ---
 
-## 🖥️ Running on a VPS
+## 🔑 Secret Keys & Security
 
-If OpenClaw is running on a remote server, use an SSH tunnel to connect securely:
+**This project contains no hardcoded API keys or secrets.**
+
+- The only credential is your OpenClaw **auth token**, which you enter in the UI at runtime — it is never stored in the codebase
+- OpenClaw itself manages your AI provider keys (Gemini, etc.) separately in `~/.openclaw/`
+- The gateway only listens on `127.0.0.1` (loopback) — it is not exposed to the internet
+
+---
+
+## 🏗 Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| [Next.js 16](https://nextjs.org) | React framework |
+| [TypeScript](https://typescriptlang.org) | Type safety |
+| [Tailwind CSS 4](https://tailwindcss.com) | Styling |
+| [Framer Motion](https://www.framer.com/motion/) | Animations |
+| [Zustand](https://zustand-demo.pmnd.rs/) | State management |
+| [react-markdown](https://github.com/remarkjs/react-markdown) | Markdown rendering |
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── app/              # Next.js app router (layout, page, globals)
+├── components/
+│   ├── chat/         # Chat interface, messages, input
+│   ├── onboarding/   # Connection setup flow
+│   ├── sidebar/      # Skills & channels sidebar
+│   └── ui/           # Reusable UI components
+├── lib/              # WebSocket client, HTTP client, utilities
+├── stores/           # Zustand state (connection, chat)
+└── types/            # TypeScript interfaces
+```
+
+---
+
+## 🌐 Connecting to OpenClaw on a VPS (Remote Server)
+
+By default OpenClaw only listens on `127.0.0.1` (loopback), so if your OpenClaw is running on a remote VPS you need to forward the port to your local machine first.
+
+### Option 1 — SSH Tunnel (Recommended, most secure)
+
+Run this on your **local machine**:
 
 ```bash
 ssh -L 18789:127.0.0.1:18789 user@your-vps-ip
 ```
 
-Then use `ws://127.0.0.1:18789` as your gateway URL — same as local. No firewall changes needed.
+Keep that terminal open. Now the VPS gateway is available locally at `ws://127.0.0.1:18789`.
+
+Then in the web interface connection screen use:
+
+| Field | Value |
+|-------|-------|
+| **Gateway URL** | `ws://127.0.0.1:18789` |
+| **Token** | Your OpenClaw token from the VPS (`~/.openclaw/openclaw.json`) |
+
+### Option 2 — Bind to a public port on the VPS
+
+On the VPS, edit `~/.openclaw/openclaw.json` and set:
+
+```json
+{
+  "gateway": {
+    "bind": "0.0.0.0",
+    "port": 18789
+  }
+}
+```
+
+Then restart the gateway:
+
+```bash
+openclaw gateway stop
+openclaw gateway start
+```
+
+In the web interface use:
+
+| Field | Value |
+|-------|-------|
+| **Gateway URL** | `ws://your-vps-ip:18789` |
+| **Token** | Your OpenClaw token from the VPS |
+
+> ⚠️ **Warning:** Binding to `0.0.0.0` exposes the port publicly. Make sure your VPS firewall only allows trusted IPs, or use the SSH tunnel option instead.
 
 ---
 
-## 🔐 Security & Secrets
+## 🛑 Stopping the Gateway
 
-**This project has zero hardcoded secrets or API keys.**
-
-- No `.env` file needed
-- No Gemini, OpenAI, or any other API key stored here
-- Your OpenClaw auth token is entered in the UI at runtime and never stored in this codebase
-- All communication stays on your local machine
-
----
-
-## 🧱 Tech Stack
-
-| Tech | Purpose |
-|------|---------|
-| Next.js 15 | React framework |
-| TypeScript | Type safety |
-| Tailwind CSS 4 | Styling |
-| WebSocket | Real-time gateway connection |
-| React Markdown | Markdown rendering |
+```bash
+openclaw gateway stop
+```
 
 ---
 
 ## 🤝 Contributing
 
-Pull requests are welcome! If you find a bug or want a new feature, open an issue first so we can discuss it.
-
-```bash
-git checkout -b feature/your-feature
-git commit -m "add your feature"
-git push origin feature/your-feature
-```
+Pull requests are welcome! Feel free to open an issue for bugs or feature requests.
 
 ---
 
 ## 📄 License
 
-MIT — free to use, modify, and distribute.
-
----
-
-> Built for people who want to own their AI, not rent it.
+MIT
